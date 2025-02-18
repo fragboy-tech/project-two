@@ -1,11 +1,10 @@
 import express from "express";
-import { Users } from "../../../db/models/User.js";
 
 import { Blogs } from "../../../db/models/Blog.js";
 
 export const blogRoutes = express.Router();
 
-blogRoutes.post("/create", async (req, res) => {
+blogRoutes.post("/", async (req, res) => {
   try {
     const { title, description, content } = req.body;
     const { userId } = req.user;
@@ -18,16 +17,22 @@ blogRoutes.post("/create", async (req, res) => {
   }
 });
 
-blogRoutes.put("/update", async (req, res) => {
-  const { title } = req.query;
-  const { blogId: myid } = req.user;
+blogRoutes.put("/:blogId", async (req, res) => {
+  const { title, description, content } = req.body;
+  const { userId } = req.user;
+
+  const { blogId } = req.params;
 
   try {
-    const blog = await Blogs.findOneAndUpdate(
-      { _id: { $eq: myid } },
-      { $set: { title: title } },
-      { new: true }
+    const blog = await Blogs.updateOne(
+      { _id: { $eq: blogId } },
+      { $set: { title, description, content } }
     );
+
+    if (!blog) {
+      return res.status(404).send("Blog not found.");
+    }
+
     res.send(blog);
   } catch (e) {
     res.send("ooriin haygaar newterne vv");

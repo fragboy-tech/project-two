@@ -17,12 +17,36 @@ userRoutes.get("/get-token", async (req, res) => {
 });
 
 userRoutes.get("/profile", async (req, res) => {
-  const { userid } = req.query;
-
-  const { userId: myid } = req.user;
+  const { userId } = req.user;
 
   try {
-    const user = await Users.findOne({ _id: { $eq: userid ? userid : myid } });
+    const user = await Users.findOne({ _id: { $eq: userId } });
+
+    res.send(user);
+  } catch (e) {
+    res.send("id taarsangui");
+  }
+});
+
+userRoutes.get("/profile/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const otherUser = await Users.findOne({
+      _id: { $eq: userId },
+    });
+
+    res.send(otherUser);
+  } catch (e) {
+    res.send("id taarsangui");
+  }
+});
+
+userRoutes.get("/others", async (req, res) => {
+  const { userId } = req.user;
+
+  try {
+    const user = await Users.find({ _id: { $ne: userId } });
 
     res.send(user);
   } catch (e) {
