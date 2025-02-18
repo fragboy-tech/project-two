@@ -31,7 +31,7 @@ userRoutes.get("/profile", async (req, res) => {
 });
 
 userRoutes.put("/update", async (req, res) => {
-  const { userName } = req.query;
+  const { userName } = req.body;
   const { userId: myid } = req.user;
 
   try {

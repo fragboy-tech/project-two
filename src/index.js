@@ -5,23 +5,9 @@ import mongoose from "mongoose";
 
 import { userRoutes } from "../modules/user/routes/routes.js";
 import { authRoutes } from "../modules/auth/routes/routes.js";
+import { blogRoutes } from "../modules/blog/routes/routes.js";
+
 dotenv.config();
-
-class Person {
-  constructor(name) {
-    this.name = name;
-  }
-
-  sayHi() {
-    console.log(`sainuu bi ${this.name} bn`);
-
-    this.sayBey();
-  }
-
-  sayBey() {
-    console.log("Bayartai");
-  }
-}
 
 mongoose.connect(process.env.MONGO_URL).then(() => {
   console.log("connected to MONGO");
@@ -50,33 +36,12 @@ const authMiddleware = (req, res, next) => {
     res.send("Auth token invalid");
   }
 };
-app.use("/user", authMiddleware);
 
-app.use("/user", userRoutes);
+app.use("/", authRoutes);
 
-app.use("/user", authRoutes);
+app.use("/user", authMiddleware, userRoutes);
 
-app.use("/data", authMiddleware);
-
-app.get("/data/get-data", (req, res) => {
-  const { user } = req;
-
-  const data = [{ name: "1" }];
-  res.send(data);
-});
-
-app.get("/jishee", (req, res) => {
-  const person = new Person("bat");
-
-  person.sayHi();
-
-  res.send("success");
-});
-
-app.get("/login", (req, res) => {
-  const token = jwt.sign({ userId: "123" }, process.env.SECRET_KEY);
-  res.send(token);
-});
+app.use("/blogs", authMiddleware, blogRoutes);
 
 app.listen(3000, () => {
   console.log("app running on 3000");
