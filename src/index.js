@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import { userRoutes } from "../modules/user/routes/routes.js";
 import { authRoutes } from "../modules/auth/routes/routes.js";
 import { blogRoutes } from "../modules/blog/routes/routes.js";
+import { commentRoutes } from "../modules/comment/routes/routes.js";
 
 dotenv.config();
 
@@ -42,6 +43,8 @@ app.use("/", authRoutes);
 app.use("/user", authMiddleware, userRoutes);
 
 app.use("/blogs", authMiddleware, blogRoutes);
+
+app.use("/comments", authMiddleware, commentRoutes);
 
 app.listen(3000, () => {
   console.log("app running on 3000");
