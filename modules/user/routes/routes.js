@@ -54,14 +54,13 @@ userRoutes.get("/others", async (req, res) => {
   }
 });
 
-userRoutes.put("/update", async (req, res) => {
-  const { userName } = req.body;
+userRoutes.put("/", async (req, res) => {
   const { userId: myid } = req.user;
 
   try {
     const user = await Users.findOneAndUpdate(
       { _id: { $eq: myid } },
-      { $set: { username: userName } },
+      { $set: req.body },
       { new: true }
     );
     res.send(user);
