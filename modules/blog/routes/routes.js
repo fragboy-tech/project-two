@@ -56,7 +56,10 @@ blogRoutes.get("/detail/:blogId", async (req, res) => {
   const { blogId } = req.params;
 
   try {
-    const myBlog = await Blogs.findOne({ _id: { $eq: blogId }, userId });
+    const myBlog = await Blogs.findOne({
+      userId: { $eq: userId },
+      _id: blogId,
+    });
 
     res.send(myBlog);
   } catch (e) {
