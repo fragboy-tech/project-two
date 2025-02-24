@@ -25,7 +25,9 @@ commentRoutes.get("/:blogId", async (req, res) => {
   const { blogId } = req.params;
 
   try {
-    const comOnBlog = await Comments.find({ blogId: { $eq: blogId } });
+    const comOnBlog = await Comments.find({ blogId: { $eq: blogId } }).sort({
+      createdAt: 1,
+    });
 
     res.send(comOnBlog);
   } catch (e) {
